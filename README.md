@@ -1,9 +1,9 @@
 # Gestion_Parking
 Ce projet est une application web permettant à une entreprise de gérer un parc automobile.
 
-# Installation 
+## Installation 
 
-# Fonctionnalitées
+## Fonctionnalitées
 
 Gestion des utilisateurs :
 - Création d’un nouvel utilisateur
@@ -17,14 +17,21 @@ Gestion des voitures :
 - Possibilité d’emprunter une voiture
 - Voir l’historique des emprunts
 
-# Technologie utilisée :
-- php 
-- react
+## Maquettes
+Voici une partie des wireframes
 
-# Maquettes
+![Liste de voitures](/Gestion_Parking/images/listeVoitures.png "Un wireframe de la page de liste des voitures")
+![Historique d'emprunt](/Gestion_Parking/images/historiqueEmprunt.png "Un wireframe de l'historique d'emprunt")
 
-# Schéma de bdd
+## Schéma de bdd
 
-# Auteurs
+![Schéma de la base de donnée](/Gestion_Parking/images/schemaBaseDeDonnée.png "Le schéma de la base de données")
+
+## Technologie utilisée :
+- PHP, on a déjà fait plusieurs projets avec php 
+- React, c'est un framework que nous maitrisons bien
+- mySQL
+
+## Auteurs
 - Le Dévéhat Tyfenn
 - Morisson Samuel
