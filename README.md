@@ -20,12 +20,12 @@ Gestion des voitures :
 ## Maquettes
 Voici une partie des wireframes
 
-![Liste de voitures](/Gestion_Parking/images/listeVoitures.png "Un wireframe de la page de liste des voitures")
-![Historique d'emprunt](/Gestion_Parking/images/historiqueEmprunt.png "Un wireframe de l'historique d'emprunt")
+![Liste de voitures](/images/listeVoitures.png "Un wireframe de la page de liste des voitures")
+![Historique d'emprunt](/images/historiqueEmprunt.png "Un wireframe de l'historique d'emprunt")
 
 ## Schéma de bdd
 
-![Schéma de la base de donnée](/Gestion_Parking/images/schemaBaseDeDonnée.png "Le schéma de la base de données")
+![Schéma de la base de donnée](/images/schemaBaseDeDonnée.png "Le schéma de la base de données")
 
 ## Technologie utilisée :
 - PHP, on a déjà fait plusieurs projets avec php 
