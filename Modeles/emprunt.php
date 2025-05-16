@@ -3,13 +3,15 @@ class Emprunt{
     private $id;
     private $id_voiture;
     private $id_utilisateur;
-    private $date_emprunt;
+    private $date_debut;
+    private $date_fin;
 
-    public function __construct($id = 0, $id_voiture, $id_utilisateur, $date_emprunt){
+    public function __construct($id = 0, $id_voiture, $id_utilisateur, $date_debut, $date_fin){
         $this->id = $id;
         $this->id_voiture = $id_voiture;
         $this->id_utilisateur = $id_utilisateur;
-        $this->date_emprunt = $date_emprunt;
+        $this->date_debut = $date_debut;
+        $this->date_fin = $date_fin;
     }
 
     // Getter et Setter
@@ -34,11 +36,21 @@ class Emprunt{
         $this->id_utilisateur = $id_utilisateur;
     }
 
-    public function getDate_emprunt(){
-        return $this->date_emprunt;
+    public function getDate_debut(){
+        return $this->date_debut;
     }
-    public function setDate_emprunt($date_emprunt){
-        $this->date_emprunt = $date_emprunt;
+    public function setDate_debut($date_debut){
+        $this->date_debut = $date_debut;
     }
+
+    public function getDate_fin(){
+        return $this->date_fin;
+    }
+    public function setDate_fin($date_fin){
+        $this->date_fin = $date_fin;
+    }
+
+
+    // Fonction sur les objets
 }
 ?>

@@ -1,19 +1,19 @@
 <?php
-class voiture{
+class Utilisateur{
     private $id;
     private $nom;
     private $prenom;
     private $email;
     private $mdp;
-    private $type;
+    private $role;
 
-    public function __construct($id = 0, $nom, $prenom, $email, $mdp, $type){
+    public function __construct($id = 0, $nom, $prenom, $email, $mdp, $role){
         $this->id = $id;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->email = $email;
         $this->mdp = $mdp;
-        $this->type = $type;
+        $this->role = $role;
     }
 
     // Getter et Setter
@@ -52,11 +52,11 @@ class voiture{
         $this->mdp = $mdp;
     }
 
-    public function getType(){
-        return $this->type;
+    public function getRole(){
+        return $this->role;
     }
-    public function setType($type){
-        $this->type = $type;
+    public function setRole($role){
+        $this->role = $role;
     }
 
 }
