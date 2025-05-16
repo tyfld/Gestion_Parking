@@ -5,6 +5,7 @@ Ce projet est une application web permettant à une entreprise de gérer un parc
 ## Installation 
 
 Activer les fonctionnalités **Apache** et **MySQL** de XAMPP
+
 Pour faire fonctionner le projet, dans votre IDE executez ces commandes :
 
 ```
