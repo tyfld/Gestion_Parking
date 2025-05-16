@@ -1,14 +1,14 @@
 <?php
 class Utilisateur{
-    private $id;
+    private $id_utilisateur;
     private $nom;
     private $prenom;
     private $email;
     private $mdp;
     private $role;
 
-    public function __construct($id = 0, $nom, $prenom, $email, $mdp, $role){
-        $this->id = $id;
+    public function __construct($id_utilisateur, $nom, $prenom, $email, $mdp, $role){
+        $this->id_utilisateur = $id_utilisateur;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->email = $email;
@@ -17,11 +17,11 @@ class Utilisateur{
     }
 
     // Getter et Setter
-    public function getId(){
-        return $this->id;
+    public function getId_utilisateur(){
+        return $this->id_utilisateur;
     }
-    public function setId($id){
-        $this->id = $id;
+    public function setId_utilisateur($id_utilisateur){
+        $this->id_utilisateur = $id_utilisateur;
     }
 
     public function getNom(){

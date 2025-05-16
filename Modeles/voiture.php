@@ -1,21 +1,21 @@
 <?php
 class Voiture{
-    private $id;
+    private $id_voiture;
     private $modele;
     private $plaque_immatriculation;
 
-    public function __construct($id = 0, $modele, $plaque_immatriculation){
-        $this->id = $id;
+    public function __construct($id_voiture, $modele, $plaque_immatriculation){
+        $this->id_voiture = $id_voiture;
         $this->modele = $modele;
         $this->plaque_immatriculation = $plaque_immatriculation;
     }
 
     // Getter et Setter
-    public function getId(){
-        return $this->id;
+    public function getId_voiture(){
+        return $this->id_voiture;
     }
-    public function setId($id){
-        $this->id = $id;
+    public function setId_voiture($id_voiture){
+        $this->id_voiture = $id_voiture;
     }
 
     public function getModele(){

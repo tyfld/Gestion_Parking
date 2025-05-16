@@ -5,11 +5,21 @@ function DAL_lister_utilisateurs() {
     $sql = "SELECT * from utilisateurs";
     $requete = $conn->query($sql);
     $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
+    $liste_utilisateurs = [];
     if ($resultat) {
-        return $resultat;
-    } else {
-        return null;
+        require_once __DIR__ . "/../Modeles/utilisateur.php";
+        foreach ($resultat as $utilisateur) {
+            $objet_utilisateur = new Utilisateur(
+                $utilisateur['id_utilisateur'],
+                $utilisateur['nom'],
+                $utilisateur['prenom'],
+                $utilisateur['email'],
+                $utilisateur['mot_de_passe'],
+                $utilisateur['role_utilisateur'],);
+            $liste_utilisateurs[] = $objet_utilisateur;
+        }
     }
+    return $liste_utilisateurs;
 }
 
 function DAL_info_utilisateur($id) {
@@ -36,16 +46,31 @@ function DAL_ajouter_utilisateur($nom, $prenom, $email, $mot_de_passe) {
     return;
 }
 
+// TODO
 function DAL_modifier_utilisateur() {
     require __DIR__ . "/bdd.php";
+    $sql = "";
+    $requete = $conn->prepare($sql);
+    $requete->execute();
+    return;
 }
 
+// TODO
 function DAL_supprimer_utilisateur($id) {
     require __DIR__ . "/bdd.php";
+    $sql = "";
+    $requete = $conn->prepare($sql);
+    $requete->execute();
+    return;
 }
 
+// TODO
 function DAL_connexion_utilisateur($email, $mot_de_passe) {
     require __DIR__ . "/bdd.php";
+    $sql = "";
+    $requete = $conn->prepare($sql);
+    $requete->execute();
+    return;
 }
 
 

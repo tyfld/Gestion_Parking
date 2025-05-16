@@ -5,11 +5,20 @@ function DAL_lister_emprunts() {
     $sql = "SELECT * from empruns";
     $requete = $conn->query($sql);
     $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
+    $liste_emprunts = [];
     if ($resultat) {
-        return $resultat;
-    } else {
-        return null;
+        require_once __DIR__ . "/../Modeles/emprunt.php";
+        foreach ($resultat as $emprunt) {
+            $objet_emprunt = new Emprunt(
+                $emprunt['id_emprunt'],
+                $emprunt['date_debut'],
+                $emprunt['date_fin'],
+                $emprunt['id_voiture'],
+                $emprunt['id_utilisateur']);
+            $liste_emprunts[] = $objet_emprunt;
+        }
     }
+    return $liste_emprunts;
 }
 
 function DAL_info_emprunt($id) {
@@ -35,16 +44,31 @@ function DAL_ajouter_emprunt($id_utilisateur, $id_voiture, $date_debut) {
     return;
 }
 
+// TODO
 function DAL_date_fin_emprunt($date_fin) {
     require __DIR__ . "/bdd.php";
+    $sql = "";
+    $requete = $conn->prepare($sql);
+    $requete->execute();
+    return;
 }
 
+// TODO
 function DAL_modifier_emprunt() {
     require __DIR__ . "/bdd.php";
+    $sql = "";
+    $requete = $conn->prepare($sql);
+    $requete->execute();
+    return;
 }
 
+// TODO
 function DAL_supprimer_emprunt($id) {
     require __DIR__ . "/bdd.php";
+    $sql = "";
+    $requete = $conn->prepare($sql);
+    $requete->execute();
+    return;
 }
 
 
