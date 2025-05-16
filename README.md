@@ -25,7 +25,7 @@ Voici une partie des wireframes
 
 ## Schéma de bdd
 
-![Schéma de la base de donnée](/images/schemaBaseDeDonnée.png "Le schéma de la base de données")
+![Schéma de la base de donnée](/images/bdd.png "Le schéma de la base de données")
 
 ## Technologie utilisée :
 - PHP, on a déjà fait plusieurs projets avec php 
