@@ -26,7 +26,18 @@ function DAL_info_voiture($id) {
     $requete = $conn->prepare($sql);
     $requete->execute(['id' => $id]);
     $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
-    return $resultat;
+    $liste_voitures = [];
+    if ($resultat) {
+        require_once __DIR__ . "/../Modeles/voiture.php";
+        foreach ($resultat as $voiture) {
+            $objet_voiture = new Voiture(
+                $voiture['id_voiture'],
+                $voiture['modele'],
+                $voiture['plaque_immatriculation']);
+            $liste_voitures[] = $objet_voiture;
+        }
+    }
+    return $liste_voitures;
 }
 
 // TODO
@@ -61,8 +72,5 @@ function DAL_supprimer_voiture($id) {
     $requete->execute();
     return;
 }
-
-
-echo "<p>DAL Voitures</p>";
 
 ?>

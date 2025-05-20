@@ -28,7 +28,20 @@ function DAL_info_utilisateur($id) {
     $requete = $conn->prepare($sql);
     $requete->execute(['id' => $id]);
     $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
-    return $resultat;
+    if ($resultat) {
+        require_once __DIR__ . "/../Modeles/utilisateur.php";
+        foreach ($resultat as $utilisateur) {
+            $objet_utilisateur = new Utilisateur(
+                $utilisateur['id_utilisateur'],
+                $utilisateur['nom'],
+                $utilisateur['prenom'],
+                $utilisateur['email'],
+                $utilisateur['mot_de_passe'],
+                $utilisateur['role_utilisateur'],);
+            $liste_utilisateurs[] = $objet_utilisateur;
+        }
+    }
+    return $liste_utilisateurs;
 }
 
 function DAL_ajouter_utilisateur($nom, $prenom, $email, $mot_de_passe) {
@@ -72,8 +85,5 @@ function DAL_connexion_utilisateur($email, $mot_de_passe) {
     $requete->execute();
     return;
 }
-
-
-echo "<p>DAL Utilisateurs</p>";
 
 ?>
