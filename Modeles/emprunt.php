@@ -1,13 +1,13 @@
 <?php
 class Emprunt{
-    private $id;
+    private $id_emprunt;
     private $id_voiture;
     private $id_utilisateur;
     private $date_debut;
     private $date_fin;
 
-    public function __construct($id = 0, $id_voiture, $id_utilisateur, $date_debut, $date_fin){
-        $this->id = $id;
+    public function __construct($id_emprunt, $id_voiture, $id_utilisateur, $date_debut, $date_fin){
+        $this->id_emprunt = $id_emprunt;
         $this->id_voiture = $id_voiture;
         $this->id_utilisateur = $id_utilisateur;
         $this->date_debut = $date_debut;
@@ -15,11 +15,11 @@ class Emprunt{
     }
 
     // Getter et Setter
-    public function getId(){
-        return $this->id;
+    public function getId_emprunt(){
+        return $this->id_emprunt;
     }
-    public function setId($id){
-        $this->id = $id;
+    public function setId_emprunt($id_emprunt){
+        $this->id_emprunt = $id_emprunt;
     }
 
     public function getId_voiture(){
