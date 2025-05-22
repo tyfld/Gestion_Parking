@@ -23,11 +23,22 @@ require_once __DIR__ . '/Services/ServicesUtilisateurs.php';
 $routes = [
     'GET' => [
         '/' => 'home',
-        '/liste-voitures' => 'listerVoiture',
+        
         '/profil' => 'profilUtilisateur',
+        '/session' => 'verif_session',
+        '/connexion-test' => 'connexion_test', // déplacer après dans POST
+        '/deconnexion' => 'deconnexion',
+
+        '/liste-voitures' => 'listerVoiture',
+        '/details-voiture' => 'detailVoiture',
+        '/emprunts-historique-utilisateur' => 'empruntHistoriqueUtilisateur',
+        '/emprunts-historique-voiture' => 'empruntHistoriqueVoiture',
+
     ],
     'POST' => [
         '/exemple' => 'exemplePOST',
+        '/connexion' => 'connexion',
+        '/inscription' => 'inscription',
     ]
 ];
 

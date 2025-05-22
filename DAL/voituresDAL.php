@@ -19,7 +19,7 @@ function DAL_lister_voitures() {
     return $liste_voitures;
 }
 
-// Normalement non utilisé
+// Récupère les infos d'une voiture (par son id)
 function DAL_info_voiture($id) {
     require __DIR__ . "/bdd.php";
     $sql = "SELECT * from voitures WHERE id_voiture = :id";
@@ -40,6 +40,7 @@ function DAL_info_voiture($id) {
     return $liste_voitures;
 }
 
+
 // TODO
 // Doit être utilisé que par un admin
 function DAL_ajouter_voiture($modele, $plaque_immatriculation) {
@@ -53,6 +54,7 @@ function DAL_ajouter_voiture($modele, $plaque_immatriculation) {
     return;
 }
 
+
 // TODO
 // Doit être utilisé que par un admin
 function DAL_modifier_voiture($id, $nouveau_modele, $nouvelle_plaque) {
@@ -62,6 +64,7 @@ function DAL_modifier_voiture($id, $nouveau_modele, $nouvelle_plaque) {
     $requete->execute();
     return;
 }
+
 
 // TODO
 // Doit être utilisé que par un admin

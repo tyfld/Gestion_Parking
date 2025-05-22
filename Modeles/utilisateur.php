@@ -2,15 +2,13 @@
 class Utilisateur{
     private $id_utilisateur;
     private $nom;
-    private $prenom;
     private $email;
     private $mdp;
     private $role;
 
-    public function __construct($id_utilisateur, $nom, $prenom, $email, $mdp, $role){
+    public function __construct($id_utilisateur, $nom, $email, $mdp, $role){
         $this->id_utilisateur = $id_utilisateur;
         $this->nom = $nom;
-        $this->prenom = $prenom;
         $this->email = $email;
         $this->mdp = $mdp;
         $this->role = $role;
@@ -29,13 +27,6 @@ class Utilisateur{
     }
     public function setNom($nom){
         $this->nom = $nom;
-    }
-
-    public function getPrenom(){
-        return $this->prenom;
-    }
-    public function setPrenom($prenom){
-        $this->prenom = $prenom;
     }
 
     public function getEmail(){
