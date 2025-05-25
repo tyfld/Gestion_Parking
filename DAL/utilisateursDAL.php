@@ -48,32 +48,40 @@ function DAL_ajouter_utilisateur($nouvel_utilisateur) { // ajout d'un utilisateu
     require_once __DIR__ . "/../Modeles/utilisateur.php";
 
     $sql = "INSERT INTO utilisateurs (nom, email, mot_de_passe, role_utilisateur)
-            VALUES (:nom, :email, :mot_de_passe, 0)";
+            VALUES (:nom, :email, :mot_de_passe, :role_utilisateur)";
     $requete = $conn->prepare($sql);
     $requete->execute([
         'nom' => $nouvel_utilisateur->getNom(),
         'email' => $nouvel_utilisateur->getEmail(),
-        'mot_de_passe' => $nouvel_utilisateur->getMdp()
+        'mot_de_passe' => $nouvel_utilisateur->getMdp(),
+        'role_utilisateur' => $nouvel_utilisateur->getRole(),
     ]);
-    $requete->fetchAll(PDO::FETCH_ASSOC);
     return;
 }
 
 // TODO
-function DAL_modifier_utilisateur() { // modification d'un utilisateur
+function DAL_modifier_utilisateur($modif_utilisateur) { // modification d'un utilisateur
     require __DIR__ . "/bdd.php";
-    $sql = "";
+    
+    $sql = "UPDATE utilisateurs
+            SET nom = :nom, email = :email, mot_de_passe = :mot_de_passe
+            WHERE id_utilisateur = :id_utilisateur";
     $requete = $conn->prepare($sql);
-    $requete->execute();
+    $requete->execute([
+        'nom' => $modif_utilisateur->getNom(),
+        'email' => $modif_utilisateur->getEmail(),
+        'mot_de_passe' => $modif_utilisateur->getMdp(),
+        'id_utilisateur' => $modif_utilisateur->getId_utilisateur()
+    ]);
     return;
 }
 
 // TODO
-function DAL_supprimer_utilisateur($id) { // suppression d'un utilisateur
+function DAL_supprimer_utilisateur($id_utilisateur) { // suppression d'un utilisateur
     require __DIR__ . "/bdd.php";
-    $sql = "";
+    $sql = "DELETE FROM utilisateurs WHERE id_utilisateur = :id_utilisateur";
     $requete = $conn->prepare($sql);
-    $requete->execute();
+    $requete->execute(['id_utilisateur' => $id_utilisateur]);
     return;
 }
 

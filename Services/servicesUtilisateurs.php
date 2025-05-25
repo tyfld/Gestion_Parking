@@ -209,4 +209,96 @@ function profilUtilisateur() {
 }
 
 
+function modifierProfilUtilisateur() { // ajouter une vérification du mot de passe actuel
+    require_once __DIR__ . "/../DAL/utilisateursDAL.php";
+    require_once __DIR__ . "/../Modeles/utilisateur.php";
+
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    //recup ancien profil
+    session_start();
+    if (!isset($_SESSION['id_utilisateur'])) {
+        echo json_encode(array(
+            'message' => 'Aucune session active',
+            'status' => 401
+        ));
+        return;
+    }
+
+    $info_profil_actuel = DAL_info_utilisateur("id_utilisateur", $_SESSION['id_utilisateur']);
+    $nom_utilisateur = $info_profil_actuel[0]->getNom();
+    $email_utilisateur = $info_profil_actuel[0]->getEmail();
+    $ancien_mdp_utilisateur = $info_profil_actuel[0]->getMdp();
+
+    if (isset($data['nom'])) {
+            $nom_utilisateur = $data['nom'];
+        }
+        if (isset($data['email'])) {
+            $email_utilisateur = $data['email'];
+    }
+
+    $ancien_mdp_formulaire;
+    $nouveau_mdp_formulaire;
+    $nouveau_mdp_securise = $ancien_mdp_utilisateur; // par défaut
+
+    // Vérification pour modification mot de passe
+    if (isset($data['nouveau_mot_de_passe'])) { // s'il y a un nouveau mdp
+        $nouveau_mdp_formulaire = $data['nouveau_mot_de_passe'];
+        $ancien_mdp_formulaire = $data['ancien_mot_de_passe'] ?? null;
+        if ($ancien_mdp_utilisateur && password_verify($ancien_mdp_formulaire, $ancien_mdp_utilisateur)) {
+            // s'il y a un ancien mdp ET qu'il est correct: securise nouveau mdp
+            $nouveau_mdp_securise = password_hash($nouveau_mdp_formulaire, PASSWORD_DEFAULT);
+        } else { // sinon renvoi erreur
+            echo json_encode(array( 
+                'message' => 'Mot de passe actuel incorrect',
+                'status' => 403
+            ));
+            return;
+        }
+    }
+    
+    $modification_utilisateur = new Utilisateur(
+        $_SESSION['id_utilisateur'],
+        $nom_utilisateur,
+        $email_utilisateur,
+        $nouveau_mdp_securise, // mdp securisé
+        null
+    );
+
+    DAL_modifier_utilisateur($modification_utilisateur);
+    $reponse_modification[] = array(
+        'message' => 'Modification réussie',
+        'status' => 201
+    );
+    echo json_encode($reponse_modification);
+}
+
+
+// Suppression d'un utilisateur
+function supprimerProfilUtilisateur() {
+    require_once __DIR__ . "/../DAL/utilisateursDAL.php";
+
+    session_start();
+    if (!isset($_SESSION['id_utilisateur'])) {
+        echo json_encode(array(
+            'message' => 'Aucune session active',
+            'status' => 401
+        ));
+        return;
+    }
+
+    //$id_session = $_SESSION['id_utilisateur'];
+    $data = json_decode(file_get_contents('php://input'), true);
+    $id_session = $data['id_utilisateur'];// ?? $_SESSION['id_utilisateur']; // si id_utilisateur dans le body, sinon session
+    DAL_supprimer_utilisateur($id_session);
+    $reponse_suppression[] = array(
+        'message' => 'Suppression réussie',
+        'status' => 200
+    );
+
+    deconnexion();
+    echo json_encode($reponse_suppression);
+}
+
+
 ?>

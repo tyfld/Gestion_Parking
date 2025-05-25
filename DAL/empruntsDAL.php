@@ -95,26 +95,29 @@ function DAL_emprunt_historique($colonne, $valeur) {
 
 
 // Ajout d'un emprunt à la bdd
-function DAL_ajouter_emprunt($id_utilisateur, $id_voiture, $date_debut) {
+function DAL_ajouter_emprunt($nouvel_emprunt) {
     require __DIR__ . "/bdd.php";
     $sql = "INSERT INTO emprunts (id_utilisateur, id_voiture, date_debut)
             VALUES (:id_utilisateur, :id_voiture, :date_debut)";
     $requete = $conn->prepare($sql);
     $requete->execute(
-        ['id_utilisateur' => $id_utilisateur], 
-        ['id_voiture' => $id_voiture],
-        ['date_debut' => $date_debut]);
-    $requete->fetchAll(PDO::FETCH_ASSOC);
+        ['id_utilisateur' => $nouvel_emprunt->getId_utilisateur(), 
+        'id_voiture' => $nouvel_emprunt->getId_voiture(),
+        'date_debut' => $nouvel_emprunt->getDate_debut()]);
     return;
 }
 
 
 // Fin d'un emprunt en ajoutant une date de fin
-function DAL_date_fin_emprunt($date_fin) {
+function DAL_date_fin_emprunt($id_emprunt, $date_fin) {
     require __DIR__ . "/bdd.php";
-    $sql = "";
+    $sql = "UPDATE emprunts SET date_fin = :date_fin
+            WHERE id_emprunt = :id_emprunt AND date_fin IS NULL";
     $requete = $conn->prepare($sql);
-    $requete->execute();
+    $requete->execute([
+        'date_fin' => $date_fin,
+        'id_emprunt' => $id_emprunt
+    ]);
     return;
 }
 
@@ -128,12 +131,12 @@ function DAL_modifier_emprunt() {
     return;
 }
 
-// Suppression d'un emprunt (normalement non utilisé dans le code car sauvegarde historique des emprunts)
-function DAL_supprimer_emprunt() {
+// Suppression des emprunts lors de la suppression d'une voiture
+function DAL_supprimer_emprunt_voiture($id_voiture) {
     require __DIR__ . "/bdd.php";
-    $sql = "";
+    $sql = "DELETE FROM emprunts WHERE id_voiture = :id_voiture";
     $requete = $conn->prepare($sql);
-    $requete->execute();
+    $requete->execute(['id_voiture' => $id_voiture]);
     return;
 }
 

@@ -16,8 +16,9 @@ if ($requestUri === '') {
     $requestUri = '/';
 }
 
-require_once __DIR__ . '/Services/ServicesVoitures.php';
-require_once __DIR__ . '/Services/ServicesUtilisateurs.php';
+require_once __DIR__ . '/Services/servicesVoitures.php';
+require_once __DIR__ . '/Services/servicesUtilisateurs.php';
+require_once __DIR__ . '/Services/servicesAdmin.php';
 
 // Création des routes:
 $routes = [
@@ -26,11 +27,10 @@ $routes = [
         
         '/profil' => 'profilUtilisateur',
         '/session' => 'verif_session',
-        '/connexion-test' => 'connexion_test', // déplacer après dans POST
+        '/connexion-test' => 'connexion_test', // à suppr, pour dev
         '/deconnexion' => 'deconnexion',
 
         '/liste-voitures' => 'listerVoiture',
-        '/details-voiture' => 'detailVoiture',
         '/emprunts-historique-utilisateur' => 'empruntHistoriqueUtilisateur',
         '/emprunts-historique-voiture' => 'empruntHistoriqueVoiture',
 
@@ -39,6 +39,22 @@ $routes = [
         '/exemple' => 'exemplePOST',
         '/connexion' => 'connexion',
         '/inscription' => 'inscription',
+
+        '/modifier-profil' => 'modifierProfilUtilisateur',
+        '/supprimer-profil'=> 'supprimerProfilUtilisateur',
+        
+        '/emprunter-voiture' => 'emprunterVoiture',
+        '/rendre-voiture' => 'rendreVoiture',
+        
+        '/details-voiture' => 'detailVoiture',
+
+        // routes pour admin
+        '/ajouter-voiture' => 'ajouterVoiture',
+        '/modifier-voiture' => 'modifierVoiture',
+        '/supprimer-voiture' => 'supprimerVoiture',
+
+        '/inscription-admin' => '',
+
     ]
 ];
 
