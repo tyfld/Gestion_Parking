@@ -25,35 +25,34 @@ $routes = [
     'GET' => [
         '/' => 'home',
         
-        '/profil' => 'profilUtilisateur',
+        '/profil' => 'profil_utilisateur',
         '/session' => 'verif_session',
         '/connexion-test' => 'connexion_test', // à suppr, pour dev
         '/deconnexion' => 'deconnexion',
 
-        '/liste-voitures' => 'listerVoiture',
-        '/emprunts-historique-utilisateur' => 'empruntHistoriqueUtilisateur',
-        '/emprunts-historique-voiture' => 'empruntHistoriqueVoiture',
+        '/liste-voitures' => 'lister_voiture',
+        '/emprunts-historique-utilisateur' => 'emprunt_historique_utilisateur',
+        '/emprunts-historique-voiture' => 'emprunt_historique_voiture',
 
     ],
     'POST' => [
-        '/exemple' => 'exemplePOST',
         '/connexion' => 'connexion',
         '/inscription' => 'inscription',
 
-        '/modifier-profil' => 'modifierProfilUtilisateur',
-        '/supprimer-profil'=> 'supprimerProfilUtilisateur',
+        '/modifier-profil' => 'modifier_profil_utilisateur',
+        '/supprimer-profil'=> 'supprimer_profil_utilisateur',
         
-        '/emprunter-voiture' => 'emprunterVoiture',
-        '/rendre-voiture' => 'rendreVoiture',
+        '/emprunter-voiture' => 'emprunter_voiture',
+        '/rendre-voiture' => 'rendre_voiture',
         
-        '/details-voiture' => 'detailVoiture',
+        '/details-voiture' => 'detail_voiture',
 
         // routes pour admin
-        '/ajouter-voiture' => 'ajouterVoiture',
-        '/modifier-voiture' => 'modifierVoiture',
-        '/supprimer-voiture' => 'supprimerVoiture',
+        '/ajouter-voiture' => 'ajouter_voiture',
+        '/modifier-voiture' => 'modifier_voiture',
+        '/supprimer-voiture' => 'supprimer_voiture',
 
-        '/inscription-admin' => '',
+        '/inscription-admin' => 'nouvel_admin',
 
     ]
 ];

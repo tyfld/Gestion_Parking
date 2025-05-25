@@ -46,7 +46,7 @@ function inscription() {
     // Vérification email disponible
     $utilisateur = DAL_info_utilisateur("email", $email_formulaire);
     $reponse_inscription = array();
-    if (isset($utilisateur[0]) && $email_formulaire == $utilisateur[0]->getEmail()) {
+    if (isset($utilisateur[0]) && $email_formulaire == $utilisateur[0]->get_email()) {
         $reponse_inscription[] = array(
             'message' => 'Email déjà utilisé',
             'status' => 409
@@ -95,11 +95,11 @@ function connexion() {
     $reponse_connexion = array();
 
     //Gestion de la session
-    if ($email_formulaire == $utilisateur[0]->getEmail() && password_verify($mdp_formulaire, $utilisateur[0]->getMdp())) {
+    if ($email_formulaire == $utilisateur[0]->get_email() && password_verify($mdp_formulaire, $utilisateur[0]->get_mdp())) {
     //if (isset($utilisateur[0]) && $email_formulaire == $utilisateur[0]->getEmail() && $mdp_formulaire == $utilisateur[0]->getMdp()) { // Sécurité mdp
         session_start();
-        $_SESSION['id_utilisateur'] = $utilisateur[0]->getId_utilisateur();
-        $_SESSION['role_utilisateur'] = $utilisateur[0]->getRole();
+        $_SESSION['id_utilisateur'] = $utilisateur[0]->get_id_utilisateur();
+        $_SESSION['role_utilisateur'] = $utilisateur[0]->get_role();
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
         $reponse_connexion[] = array(
@@ -128,10 +128,10 @@ function connexion_test() {
     $reponse_connexion = array();
 
     // if ($emailTest == $utilisateur[0]->getEmail() && password_verify($mdpTest, $utilisateur[0]->getMdp())) {
-    if ($email_formulaire == $utilisateur[0]->getEmail() && $mdp_formulaire == $utilisateur[0]->getMdp()) {
+    if ($email_formulaire == $utilisateur[0]->get_email() && $mdp_formulaire == $utilisateur[0]->get_mdp()) {
         session_start();
-        $_SESSION['id_utilisateur'] = $utilisateur[0]->getId_utilisateur();
-        $_SESSION['role_utilisateur'] = $utilisateur[0]->getRole();
+        $_SESSION['id_utilisateur'] = $utilisateur[0]->get_id_utilisateur();
+        $_SESSION['role_utilisateur'] = $utilisateur[0]->get_role();
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
         $reponse_connexion[] = array(
@@ -163,7 +163,7 @@ function deconnexion() {
 
 // Gestion des tokens -------------------------------------------------------------------------------------------------
 // TODO : finir gestion des tokens
-function getTokenCSRF() {
+function get_token_CSRF() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -177,13 +177,13 @@ function getTokenCSRF() {
     ));
 }
 
-function verifTokenCSRF() {
+function verif_token_CSRF() {
     // TODO
 }
 
 
 // Envoi des information de l'utilisateur connecté --------------------------------------------------------------------
-function profilUtilisateur() { 
+function profil_utilisateur() { 
     require_once __DIR__ . "/../DAL/utilisateursDAL.php";
 
     session_start();
@@ -201,15 +201,15 @@ function profilUtilisateur() {
     $json_utilisateur = array();
 
     $json_utilisateur[] = array(
-        'id_utilisateur' => $utilisateur[0]->getId_utilisateur(),
-        'nom' => $utilisateur[0]->getNom(),
-        'email' => $utilisateur[0]->getEmail(),
+        'id_utilisateur' => $utilisateur[0]->get_id_utilisateur(),
+        'nom' => $utilisateur[0]->get_nom(),
+        'email' => $utilisateur[0]->get_email(),
     );
     echo json_encode($json_utilisateur);
 }
 
 
-function modifierProfilUtilisateur() { // ajouter une vérification du mot de passe actuel
+function modifier_profil_utilisateur() { // ajouter une vérification du mot de passe actuel
     require_once __DIR__ . "/../DAL/utilisateursDAL.php";
     require_once __DIR__ . "/../Modeles/utilisateur.php";
 
@@ -226,9 +226,9 @@ function modifierProfilUtilisateur() { // ajouter une vérification du mot de pa
     }
 
     $info_profil_actuel = DAL_info_utilisateur("id_utilisateur", $_SESSION['id_utilisateur']);
-    $nom_utilisateur = $info_profil_actuel[0]->getNom();
-    $email_utilisateur = $info_profil_actuel[0]->getEmail();
-    $ancien_mdp_utilisateur = $info_profil_actuel[0]->getMdp();
+    $nom_utilisateur = $info_profil_actuel[0]->get_nom();
+    $email_utilisateur = $info_profil_actuel[0]->get_email();
+    $ancien_mdp_utilisateur = $info_profil_actuel[0]->get_mdp();
 
     if (isset($data['nom'])) {
             $nom_utilisateur = $data['nom'];
@@ -275,7 +275,7 @@ function modifierProfilUtilisateur() { // ajouter une vérification du mot de pa
 
 
 // Suppression d'un utilisateur
-function supprimerProfilUtilisateur() {
+function supprimer_profil_ptilisateur() {
     require_once __DIR__ . "/../DAL/utilisateursDAL.php";
 
     session_start();

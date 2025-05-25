@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 
 
 // Lister les voitures ainsi que leur disponibilité
-function listerVoiture() {
+function lister_voiture() {
     require_once __DIR__ . "/../DAL/voituresDAL.php";
     require_once __DIR__ . "/../DAL/empruntsDAL.php";
 
@@ -17,15 +17,15 @@ function listerVoiture() {
     foreach ($voiture as $v) {
         $disponible = true;
         foreach ($emprunt as $e) {
-            if ($v->getId_voiture() == $e->getId_voiture()) {
+            if ($v->get_id_voiture() == $e->get_id_voiture()) {
                 $disponible = false;
                 break;
             }
         }
         $json_voiture[] = array(
-            'id_voiture' => $v->getId_voiture(),
-            'modele' => $v-> getModele(),
-            'plaque-immatriculation' => $v->getPlaque_immatriculation(),
+            'id_voiture' => $v->get_id_voiture(),
+            'modele' => $v-> get_modele(),
+            'plaque-immatriculation' => $v->get_plaque_immatriculation(),
             'disponible' => $disponible
             );
     }
@@ -34,7 +34,7 @@ function listerVoiture() {
 
 
 // Afficher les informations d'une voiture ainsi que sa disponibilité
-function detailVoiture() { 
+function detail_voiture() { 
     require_once __DIR__ . "/../DAL/voituresDAL.php";
 
     $data = json_decode(file_get_contents('php://input'), true);
@@ -51,9 +51,9 @@ function detailVoiture() {
     $json_voiture = array();
 
     $json_voiture[] = array(
-        'id_voiture' => $voiture[0]->getId_voiture(),
-        'modele' => $voiture[0]->getModele(),
-        'plaque_immatriculation' => $voiture[0]->getPlaque_immatriculation(),
+        'id_voiture' => $voiture[0]->get_id_voiture(),
+        'modele' => $voiture[0]->get_modele(),
+        'plaque_immatriculation' => $voiture[0]->get_plaque_immatriculation(),
     );
     echo json_encode($json_voiture);
 }
@@ -61,7 +61,7 @@ function detailVoiture() {
 
 
 // Afficher la liste des voitures qui ont été empruntées par un utilisateur
-function empruntHistoriqueUtilisateur() {
+function emprunt_historique_utilisateur() {
     require_once __DIR__ . "/../DAL/voituresDAL.php";
     require_once __DIR__ . "/../DAL/empruntsDAL.php";
 
@@ -73,13 +73,13 @@ function empruntHistoriqueUtilisateur() {
 
     // liste des voitures pour les emprunt trouvés
     foreach ($emprunts as $e) {
-        $voiture = DAL_info_voiture('id_voiture', $e->getId_voiture());
+        $voiture = DAL_info_voiture('id_voiture', $e->get_id_voiture());
         $json_emprunts[] = array(
-            'id_voiture' =>$e->getId_voiture(),
-            'modele' => $voiture[0]->getModele(),
-            'plaque_immatriculation' => $voiture[0]->getPlaque_immatriculation(),
-            'date_debut' => $e->getDate_debut(),
-            'date_fin' => $e->getDate_fin(),
+            'id_voiture' =>$e->get_id_voiture(),
+            'modele' => $voiture[0]->get_modele(),
+            'plaque_immatriculation' => $voiture[0]->get_plaque_immatriculation(),
+            'date_debut' => $e->get_date_debut(),
+            'date_fin' => $e->get_date_fin(),
         );
     }
     echo json_encode($json_emprunts);
@@ -87,7 +87,7 @@ function empruntHistoriqueUtilisateur() {
 
 
 // Historique des emprunts d'une voiture
-function empruntHistoriqueVoiture() {
+function emprunt_historique_voiture() {
     require_once __DIR__ . "/../DAL/utilisateursDAL.php";
     require_once __DIR__ . "/../DAL/empruntsDAL.php";
 
@@ -98,11 +98,11 @@ function empruntHistoriqueVoiture() {
 
     // liste des voitures pour les emprunt trouvés
     foreach ($emprunts as $e) {
-        $utilisateur = DAL_info_utilisateur("id_utilisateur", $e->getId_utilisateur());
+        $utilisateur = DAL_info_utilisateur("id_utilisateur", $e->get_id_utilisateur());
         $json_emprunts[] = array(
-            'nom_utilisateur' => $utilisateur[0]->getNom(),
-            'date_debut' => $e->getDate_debut(),
-            'date_fin' => $e->getDate_fin(),
+            'nom_utilisateur' => $utilisateur[0]->get_nom(),
+            'date_debut' => $e->get_date_debut(),
+            'date_fin' => $e->get_date_fin(),
         );
     }
     echo json_encode($json_emprunts);
@@ -110,7 +110,7 @@ function empruntHistoriqueVoiture() {
 
 
 // Emprunter une voiture ----------------------------------------------------------------------------------------------
-function emprunterVoiture() { 
+function emprunter_voiture() { 
     require_once __DIR__ . "/../DAL/empruntsDAL.php";
     require_once __DIR__ . "/../Modeles/emprunt.php";
 
@@ -146,7 +146,7 @@ function emprunterVoiture() {
 
 
 // Rendre une voiture
-function rendreVoiture() {
+function rendre_voiture() {
     require_once __DIR__ . "/../DAL/empruntsDAL.php";
 
     $data = json_decode(file_get_contents('php://input'), true);

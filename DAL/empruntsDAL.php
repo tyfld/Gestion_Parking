@@ -101,9 +101,9 @@ function DAL_ajouter_emprunt($nouvel_emprunt) {
             VALUES (:id_utilisateur, :id_voiture, :date_debut)";
     $requete = $conn->prepare($sql);
     $requete->execute(
-        ['id_utilisateur' => $nouvel_emprunt->getId_utilisateur(), 
-        'id_voiture' => $nouvel_emprunt->getId_voiture(),
-        'date_debut' => $nouvel_emprunt->getDate_debut()]);
+        ['id_utilisateur' => $nouvel_emprunt->get_id_utilisateur(), 
+        'id_voiture' => $nouvel_emprunt->get_id_voiture(),
+        'date_debut' => $nouvel_emprunt->get_date_debut()]);
     return;
 }
 

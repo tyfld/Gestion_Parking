@@ -15,38 +15,38 @@ class Utilisateur{
     }
 
     // Getter et Setter
-    public function getId_utilisateur(){
+    public function get_id_utilisateur(){
         return $this->id_utilisateur;
     }
-    public function setId_utilisateur($id_utilisateur){
+    public function set_id_utilisateur($id_utilisateur){
         $this->id_utilisateur = $id_utilisateur;
     }
 
-    public function getNom(){
+    public function get_nom(){
         return $this->nom;
     }
-    public function setNom($nom){
+    public function set_nom($nom){
         $this->nom = $nom;
     }
 
-    public function getEmail(){
+    public function get_email(){
         return $this->email;
     }
-    public function setEmail($email){
+    public function set_email($email){
         $this->email = $email;
     }
 
-    public function getMdp(){
+    public function get_mdp(){
         return $this->mdp;
     }
-    public function setMdp($mdp){
+    public function set_mdp($mdp){
         $this->mdp = $mdp;
     }
 
-    public function getRole(){
+    public function get_role(){
         return $this->role;
     }
-    public function setRole($role){
+    public function set_role($role){
         $this->role = $role;
     }
 

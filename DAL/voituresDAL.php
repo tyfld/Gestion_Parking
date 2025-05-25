@@ -49,8 +49,8 @@ function DAL_ajouter_voiture($voiture) {
             VALUES (:modele, :plaque_immatriculation)";
     $requete = $conn->prepare($sql);
     $requete->execute([
-        'modele' => $voiture->getModele(),
-        'plaque_immatriculation' => $voiture->getPlaque_immatriculation()
+        'modele' => $voiture->get_modele(),
+        'plaque_immatriculation' => $voiture->get_plaque_immatriculation()
     ]);
     return;
 }
@@ -66,9 +66,9 @@ function DAL_modifier_voiture($modif_voiture) {
             WHERE id_voiture = :id_voiture";
     $requete = $conn->prepare($sql);
     $requete->execute([
-        'modele' => $modif_voiture->getModele(),
-        'plaque_immatriculation' => $modif_voiture->getPlaque_immatriculation(),
-        'id_voiture' => $modif_voiture->getId_voiture()
+        'modele' => $modif_voiture->get_modele(),
+        'plaque_immatriculation' => $modif_voiture->get_plaque_immatriculation(),
+        'id_voiture' => $modif_voiture->get_id_voiture()
     ]);
     return;
 }

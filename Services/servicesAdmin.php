@@ -5,7 +5,7 @@ header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
 
-function verifSessionAdmin() {
+function verif_session_admin() {
     session_start();
     if (isset($_SESSION['role']) && $_SESSION['role'] == 1) {
         return true; // L'utilisateur est un admin
@@ -18,7 +18,7 @@ function verifSessionAdmin() {
 
 
 // Gestion des voitures
-function ajouterVoiture() {
+function ajouter_voiture() {
     if (true) { // remplacer true par verifSessionAdmin()
         require_once __DIR__ . "/../DAL/voituresDAL.php";
         require_once __DIR__ . "/../Modeles/voiture.php";
@@ -49,7 +49,7 @@ function ajouterVoiture() {
         // Vérification email disponible
         $voiture = DAL_info_voiture('plaque_immatriculation', $plaque_formulaire);
         $reponse_erreur_voiture = array();
-        if (isset($voiture[0]) && $plaque_formulaire == $voiture[0]->getPlaque_immatriculation()) {
+        if (isset($voiture[0]) && $plaque_formulaire == $voiture[0]->get_plaque_immatriculation()) {
             $reponse_inscription[] = array(
                 'message' => "Plaque d'immatriculation déjà utilisé",
                 'status' => 409
@@ -74,7 +74,7 @@ function ajouterVoiture() {
 }
 
 
-function modifierVoiture() {
+function modifier_voiture() {
     if (true) { // remplacer true par verifSessionAdmin()
         require_once __DIR__ . "/../DAL/voituresDAL.php";
         require_once __DIR__ . "/../Modeles/voiture.php";
@@ -100,8 +100,8 @@ function modifierVoiture() {
         }
 
         $info_voiture_actuelle = DAL_info_voiture("id_voiture", $data['id_voiture']);
-        $modele_voiture = $info_voiture_actuelle[0]->getModele();
-        $plaque_voiture = $info_voiture_actuelle[0]->getPlaque_immatriculation();
+        $modele_voiture = $info_voiture_actuelle[0]->get_modele();
+        $plaque_voiture = $info_voiture_actuelle[0]->get_plaque_immatriculation();
 
         if (isset($data['modele'])) {
             $modele_voiture = $data['modele'];
@@ -127,7 +127,7 @@ function modifierVoiture() {
 }
 
 
-function supprimerVoiture() {
+function supprimer_voiture() {
     if (true) { // remplacer true par verifSessionAdmin()
         require_once __DIR__ . "/../DAL/voituresDAL.php";
         require_once __DIR__ . "/../DAL/empruntsDAL.php";
@@ -168,10 +168,20 @@ function supprimerVoiture() {
 
 
 // Création d'un compte admin -----------------------------------------------------------------------------------------
-function nouvelAdmin() {
-    if (verifSessionAdmin()) {
+function nouvel_admin() {
+    if (verif_session_admin()) {
         require_once __DIR__ . "/../DAL/utilisateursDAL.php";
         require_once __DIR__ . "/../Modeles/utilisateur.php";
+
+        /*session_start();
+        // s'il y a une session active et qu'il s'agit d'un role admin (1)
+        if (!isset($_SESSION['id_utilisateur']) || !isset($_SESSION['role']) || $_SESSION['role'] != 1) {
+            echo json_encode(array(
+                'message' => 'Aucune session active ou accès interdit',
+                'status' => 401
+            ));
+            return;
+        }*/
 
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -191,7 +201,7 @@ function nouvelAdmin() {
         // Vérification email disponible
         $utilisateur = DAL_info_utilisateur("email", $email_formulaire);
         $reponse_inscription = array();
-        if (isset($utilisateur[0]) && $email_formulaire == $utilisateur[0]->getEmail()) {
+        if (isset($utilisateur[0]) && $email_formulaire == $utilisateur[0]->get_email()) {
             $reponse_inscription[] = array(
                 'message' => 'Email déjà utilisé',
                 'status' => 409

@@ -51,10 +51,10 @@ function DAL_ajouter_utilisateur($nouvel_utilisateur) { // ajout d'un utilisateu
             VALUES (:nom, :email, :mot_de_passe, :role_utilisateur)";
     $requete = $conn->prepare($sql);
     $requete->execute([
-        'nom' => $nouvel_utilisateur->getNom(),
-        'email' => $nouvel_utilisateur->getEmail(),
-        'mot_de_passe' => $nouvel_utilisateur->getMdp(),
-        'role_utilisateur' => $nouvel_utilisateur->getRole(),
+        'nom' => $nouvel_utilisateur->get_nom(),
+        'email' => $nouvel_utilisateur->get_email(),
+        'mot_de_passe' => $nouvel_utilisateur->get_mdp(),
+        'role_utilisateur' => $nouvel_utilisateur->get_role(),
     ]);
     return;
 }
@@ -68,10 +68,10 @@ function DAL_modifier_utilisateur($modif_utilisateur) { // modification d'un uti
             WHERE id_utilisateur = :id_utilisateur";
     $requete = $conn->prepare($sql);
     $requete->execute([
-        'nom' => $modif_utilisateur->getNom(),
-        'email' => $modif_utilisateur->getEmail(),
-        'mot_de_passe' => $modif_utilisateur->getMdp(),
-        'id_utilisateur' => $modif_utilisateur->getId_utilisateur()
+        'nom' => $modif_utilisateur->get_nom(),
+        'email' => $modif_utilisateur->get_email(),
+        'mot_de_passe' => $modif_utilisateur->get_mdp(),
+        'id_utilisateur' => $modif_utilisateur->get_id_utilisateur()
     ]);
     return;
 }
@@ -82,15 +82,6 @@ function DAL_supprimer_utilisateur($id_utilisateur) { // suppression d'un utilis
     $sql = "DELETE FROM utilisateurs WHERE id_utilisateur = :id_utilisateur";
     $requete = $conn->prepare($sql);
     $requete->execute(['id_utilisateur' => $id_utilisateur]);
-    return;
-}
-
-// TODO pas besoin, géré par le sevice
-function DAL_connexion_utilisateur($email, $mot_de_passe) {
-    require __DIR__ . "/bdd.php";
-    $sql = "";
-    $requete = $conn->prepare($sql);
-    $requete->execute();
     return;
 }
 
