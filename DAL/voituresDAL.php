@@ -41,7 +41,7 @@ function DAL_info_voiture($colonne, $valeur) {
 }
 
 
-// TODO
+
 // Doit être utilisé que par un admin
 function DAL_ajouter_voiture($voiture) {
     require __DIR__ . "/bdd.php";

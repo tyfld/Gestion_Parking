@@ -13,11 +13,15 @@ require_once __DIR__ . "/session.php";
 
 
 function verif_session_admin() {
-    if (isset($_SESSION['role']) && $_SESSION['role'] == 1) {
+    if (isset($_SESSION['role_utilisateur']) && $_SESSION['role_utilisateur'] === 1) {
         return true; // L'utilisateur est un admin
     } else {
         http_response_code(403);
-        echo json_encode(['message' => 'Accès réservé aux administrateurs']);
+        $reponse_erreur_session = array([
+            'message' => 'Accès réservé aux administrateurs',
+            'success' => false
+        ]);
+        echo json_encode($reponse_erreur_session);
         return false; // L'utilisateur n'est pas un admin
     }
 }
@@ -25,42 +29,35 @@ function verif_session_admin() {
 
 // Gestion des voitures
 function ajouter_voiture() {
-    if (true) { // remplacer true par verifSessionAdmin()
+    $reponse_creation_voiture = array();
+    if (verif_session_admin()) {
         require_once __DIR__ . "/../DAL/voituresDAL.php";
         require_once __DIR__ . "/../Modeles/voiture.php";
-
-        /*session_start();
-        // s'il y a une session active et qu'il s'agit d'un role admin (1)
-        if (!isset($_SESSION['id_utilisateur']) || !isset($_SESSION['role']) || $_SESSION['role'] != 1) {
-            echo json_encode(array(
-                'message' => 'Aucune session active ou accès interdit',
-                'status' => 401
-            ));
-            return;
-        }*/
 
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($data['modele']) || !isset($data['plaque_immatriculation'])) {
-            echo json_encode([
+            $reponse_creation_voiture[] = array(
                 'message' => "Plaque d'immatriculation et/ou modèle requis",
+                'success' => false,
                 'status' => 400
-            ]);
+            );
+            echo json_encode($reponse_creation_voiture[0]);
             return;
         }
 
         $modele_formulaire = $data['modele'];
         $plaque_formulaire = $data['plaque_immatriculation'];
 
-        // Vérification email disponible
         $voiture = DAL_info_voiture('plaque_immatriculation', $plaque_formulaire);
-        $reponse_erreur_voiture = array();
+        
         if (isset($voiture[0]) && $plaque_formulaire == $voiture[0]->get_plaque_immatriculation()) {
-            $reponse_inscription[] = array(
+            $reponse_creation_voiture[] = array(
                 'message' => "Plaque d'immatriculation déjà utilisé",
+                'success' => false,
                 'status' => 409
             );
-            echo json_encode($reponse_erreur_voiture);
+            echo json_encode($reponse_creation_voiture[0]);
             return;
         }
 
@@ -71,12 +68,21 @@ function ajouter_voiture() {
         );
 
         DAL_ajouter_voiture($nouvelle_voiture);
-        $reponse_voiture[] = array(
+        $reponse_creation_voiture[] = array(
             'message' => 'Nouvelle voiture créée avec succès',
+            "success" => true,
             'status' => 201
         );
-        echo json_encode($reponse_voiture);
-    } else return;
+        echo json_encode($reponse_creation_voiture[0]);
+    } else {
+        $reponse_creation_voiture[] = array(
+            'message' => 'Seul un administrateur peut ajouter de nouvelles voitures',
+            "success" => false,
+            'status' => 409
+        );
+        echo json_encode($reponse_creation_voiture[0]);
+        return;
+    }
 }
 
 
@@ -84,16 +90,6 @@ function modifier_voiture() {
     if (true) { // remplacer true par verifSessionAdmin()
         require_once __DIR__ . "/../DAL/voituresDAL.php";
         require_once __DIR__ . "/../Modeles/voiture.php";
-
-        /*session_start();
-        // s'il y a une session active et qu'il s'agit d'un role admin (1)
-        if (!isset($_SESSION['id_utilisateur']) || !isset($_SESSION['role']) || $_SESSION['role'] != 1) {
-            echo json_encode(array(
-                'message' => 'Aucune session active ou accès interdit',
-                'status' => 401
-            ));
-            return;
-        }*/
 
         $data = json_decode(file_get_contents('php://input'), true);
         
@@ -138,16 +134,6 @@ function supprimer_voiture() {
         require_once __DIR__ . "/../DAL/voituresDAL.php";
         require_once __DIR__ . "/../DAL/empruntsDAL.php";
 
-        /*session_start();
-        // s'il y a une session active et qu'il s'agit d'un role admin (1)
-        if (!isset($_SESSION['id_utilisateur']) || !isset($_SESSION['role']) || $_SESSION['role'] != 1) {
-            echo json_encode(array(
-                'message' => 'Aucune session active ou accès interdit',
-                'status' => 401
-            ));
-            return;
-        }*/
-
         $data = json_decode(file_get_contents('php://input'), true);
         
         if (!isset($data['id_voiture'])) {
@@ -174,20 +160,10 @@ function supprimer_voiture() {
 
 
 // Création d'un compte admin -----------------------------------------------------------------------------------------
-function nouvel_admin() {
+function nouvel_utilisateur_admin() {
     if (verif_session_admin()) {
         require_once __DIR__ . "/../DAL/utilisateursDAL.php";
         require_once __DIR__ . "/../Modeles/utilisateur.php";
-
-        /*session_start();
-        // s'il y a une session active et qu'il s'agit d'un role admin (1)
-        if (!isset($_SESSION['id_utilisateur']) || !isset($_SESSION['role']) || $_SESSION['role'] != 1) {
-            echo json_encode(array(
-                'message' => 'Aucune session active ou accès interdit',
-                'status' => 401
-            ));
-            return;
-        }*/
 
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -202,17 +178,19 @@ function nouvel_admin() {
         $nom_formulaire = $data['nom'];
         $email_formulaire = $data['email'];
         $mdp_formulaire = $data['mot_de_passe'];
+        $role_formulaire = $data['role_utilisateur'];
         $mdp_securise = password_hash($mdp_formulaire, PASSWORD_DEFAULT);
 
         // Vérification email disponible
         $utilisateur = DAL_info_utilisateur("email", $email_formulaire);
-        $reponse_inscription = array();
+        $reponse_inscription_admin = array();
         if (isset($utilisateur[0]) && $email_formulaire == $utilisateur[0]->get_email()) {
-            $reponse_inscription[] = array(
+            $reponse_inscription_admin[] = array(
                 'message' => 'Email déjà utilisé',
+                'success' => false,
                 'status' => 409
             );
-            echo json_encode($reponse_inscription);
+            echo json_encode($reponse_inscription_admin[0]);
             return;
         }
 
@@ -221,15 +199,16 @@ function nouvel_admin() {
             $nom_formulaire,
             $email_formulaire,
             $mdp_securise,
-            1 //admin
+            $role_formulaire
         );
 
         DAL_ajouter_utilisateur($nouvel_utilisateur);
-        $reponse_inscription[] = array(
-            'message' => 'Nouveau compte administrateur créé avec succès',
+        $reponse_inscription_admin[] = array(
+            'message' => 'Nouveau compte créé avec succès',
+            'success' => true,
             'status' => 201
         );
-        echo json_encode($reponse_inscription);
+        echo json_encode($reponse_inscription_admin[0]);
     } else return;
     
 }

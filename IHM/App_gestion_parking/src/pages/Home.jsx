@@ -45,7 +45,7 @@ function Home() {
                 Ajouter une voiture
               </a>
               <a href="/ajout_utilisateur" className="border rounded px-4 py-2 hover:bg-gray-100">
-                Voir liste utilisateur
+                Ajouter un utilisateur
               </a>
             </div>
           )}

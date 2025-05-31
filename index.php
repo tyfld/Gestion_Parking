@@ -57,7 +57,7 @@ $routes = [
         '/modifier-voiture' => 'modifier_voiture',
         '/supprimer-voiture' => 'supprimer_voiture',
 
-        '/inscription-admin' => 'nouvel_admin',
+        '/inscription-admin' => 'nouvel_utilisateur_admin',
 
     ]
 ];

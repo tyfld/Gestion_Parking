@@ -49,13 +49,46 @@ function Ajout_Utilisateur_Admin() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setUtilisateurs([...utilisateurs, form]);
+
+        try {
+          let role_bdd;
+          if (form.role === "utilisateur") {
+            role_bdd = 0;
+          } else if (form.role === "admin") {
+            role_bdd = 1;
+          }
+          const URL = "http://localhost/projets/Gestion_Parking/inscription-admin";
+          fetch(URL, {
+            method: "POST",
+            credentials: "include",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              "nom": form.nom,
+              "email": form.email,
+              "role_utilisateur": role_bdd,
+              "mot_de_passe": form.motDePasse
+            }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert("Utilisateur ajoutée avec succès !");
+            } else {
+              alert(data.message || "Erreur lors de l'ajout d'un utilisateur.");
+            }
+          })
+        } catch (error) {
+          console.error("Erreur lors de la création du compte :", error);
+          alert("Une erreur est survenue. Veuillez réessayer plus tard.");
+          return;
+        }
+
         setForm({
           nom: "",
           email: "",
           motDePasse: "",
           role: "utilisateur",
         });
-        alert("Utilisateur ajouté !");
     };
     
     return (
