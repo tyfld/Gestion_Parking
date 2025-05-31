@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect} from "react";
 
-function Home({ isAdmin }) {
+function Home() {
 
   const [sessionData, setSessionData] = useState({"session": false});
 
@@ -39,14 +39,14 @@ function Home({ isAdmin }) {
   
         <div className="flex gap-4">
           {/* Colonne gauche - réservé aux admins */}
-          {isAdmin && (
+          {sessionData.session && sessionData.session == true && sessionData.role == 1 && (
             <div className="border border-red-400 p-4 flex flex-col gap-4 w-fit">
-              <button className="border rounded px-4 py-2 hover:bg-gray-100">
+              <a href="/ajout_voiture" className="border rounded px-4 py-2 hover:bg-gray-100">
                 Ajouter une voiture
-              </button>
-              <button className="border rounded px-4 py-2 hover:bg-gray-100">
+              </a>
+              <a href="/ajout_utilisateur" className="border rounded px-4 py-2 hover:bg-gray-100">
                 Voir liste utilisateur
-              </button>
+              </a>
             </div>
           )}
   

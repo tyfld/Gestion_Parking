@@ -28,6 +28,12 @@ function Connexion() {
     fetchSession();
   }, [])
 
+  useEffect(() => {
+    if (sessionData !== null && sessionData.session === true) {
+      navigate("/")
+    }
+  }, [sessionData, navigate])
+
   
   const [form, setForm] = useState({
     email: "",

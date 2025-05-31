@@ -1,13 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 function Ajout_Utilisateur_Admin() {
 
-    const [form, setForm] = useState({
-        nom: "",
-        email: "",
-        motDePasse: "",
-        role: "utilisateur",
-    });
+  const [sessionData, setSessionData] = useState({"session": false});
+  const navigate = useNavigate();
+    
+  const fetchSession = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/session";
+    try {
+      const response = await fetch(URL, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      })
+      const sessionData = await response.json();
+      setSessionData(sessionData);
+    } catch (error) {
+        console.error("Erreur lors de la récupération de la session : ", error);
+    }
+  }
+    
+  useEffect(() => {
+    fetchSession();
+  }, [])
+
+  useEffect(() => {
+    if (sessionData.session && sessionData.role != 1) {
+      navigate("/")
+    }
+  }, [sessionData, navigate])
+
+
+  const [form, setForm] = useState({
+    nom: "",
+    email: "",
+    motDePasse: "",
+    role: "utilisateur",
+  });
     
     const [utilisateurs, setUtilisateurs] = useState([]);
     
@@ -30,6 +60,9 @@ function Ajout_Utilisateur_Admin() {
     
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
+        <Link to="/">
+          <button className="border rounded-full px-4 py-2">Accueil</button>
+        </Link>
         <div className="bg-white p-8 rounded shadow-md w-full max-w-xl">
         <h2 className="text-2xl font-bold mb-6 text-center">Ajouter un utilisateur</h2>
     

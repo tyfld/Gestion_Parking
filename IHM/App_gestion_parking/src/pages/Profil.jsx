@@ -4,26 +4,26 @@ import { useState, useEffect } from "react";
 function Profil() {
 
   const navigate = useNavigate();
+  const [sessionData, setSessionData] = useState(null);
+  const [utilisateur, setUtilisateur] = useState({});
+  const [voitures, setVoitures] = useState([]);
 
   const fetchSession = async () => {
     const URL = "http://localhost/projets/Gestion_Parking/session";
     try {
-      await fetch(URL, {
+      const response = await fetch(URL, {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" }
       })
+      const sessionData = await response.json();
+      setSessionData(sessionData);
     } catch (error) {
       console.error("Erreur lors de la récupération de la session : ", error);
     }
   }
 
   
-
-  // Simule les données utilisateur
-  const [utilisateur, setUtilisateur] = useState({});
-  const [voitures, setVoitures] = useState([]);
-
   const fetchUtilisateur = async () => {
     const URL = "http://localhost/projets/Gestion_Parking/profil";
     try {
@@ -58,9 +58,16 @@ function Profil() {
 
   useEffect(() => {
       fetchSession();
+  }, [])
+
+  useEffect(() => {
+    if (sessionData !== null && sessionData.session === false) {
+      navigate("/connexion")
+    } else if (sessionData && sessionData.session === true) {
       fetchUtilisateur();
       fetchVoitures();
-  }, [])
+    }
+  }, [sessionData, navigate])
 
   const handleDeconnexion = () => {
     const URL = "http://localhost/projets/Gestion_Parking/deconnexion";

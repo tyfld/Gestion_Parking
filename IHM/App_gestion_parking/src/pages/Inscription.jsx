@@ -27,6 +27,12 @@ function Inscription() {
     useEffect(() => {
         fetchSession();
     }, [])
+
+    useEffect(() => {
+    if (sessionData !== null && sessionData.session === true) {
+      navigate("/")
+    }
+  }, [sessionData, navigate])
     
     const [form, setForm] = useState({
         nom: "",
