@@ -84,7 +84,7 @@ function Liste_Voitures() {
                 <td className="border px-4 py-2">
                   {v.disponible ? (
 
-                    <Link to="/emprunter">
+                    <Link to={`/emprunter/${v.id_voiture}`}>
                         <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                         Emprunter
                         </button>

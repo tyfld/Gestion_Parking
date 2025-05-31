@@ -57,15 +57,18 @@ function disponible_voiture() {
 
         if ($v->get_id_voiture() == $data['id_voiture']) {
             $disponible = true;
-            $id_utilisateur;
+            $id_utilisateur = null;
+            $id_emprunt = null;
             foreach ($emprunt as $e) {
                 $id_utilisateur = $e->get_id_utilisateur();
+                $id_emprunt = $e->get_id_emprunt();
                 if ($v->get_id_voiture() == $e->get_id_voiture()) {
                     $disponible = false;
                     break;
                 }
             }
             $json_voiture[] = array(
+                'id_emprunt' => $id_emprunt,
                 'id_voiture' => $v->get_id_voiture(),
                 'id_utilisateur' => $id_utilisateur,
                 'modele' => $v-> get_modele(),
@@ -160,32 +163,37 @@ function emprunter_voiture() {
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (!isset($data['id_voiture']) || !isset($data['id_utilisateur']) || !isset($data['date_debut'])) {
-        echo json_encode([
+    $reponse_emprunt = array();
+
+    if (!isset($data['id_voiture']) || !isset($data['id_utilisateur'])) {
+        $reponse_emprunt[] = array(
             'message' => "Erreur dans l'envoi des données",
+            'success' => false,
             'status' => 400
-        ]);
+        );
+        echo json_encode($reponse_emprunt[0]);
         return;
     }
 
     $id_voiture_formulaire = $data['id_voiture'];
     $id_utilisateur_formulaire = $data['id_utilisateur'];
-    $dated_formulaire = $data['date_debut'];
+    $date_debut = date('Y-m-d');
 
     $nouvel_emprunt = new Emprunt (
         null,
         $id_voiture_formulaire,
         $id_utilisateur_formulaire,
-        $dated_formulaire,
+        $date_debut,
         null // date_fin reste vide
     );
 
     DAL_ajouter_emprunt($nouvel_emprunt);
     $reponse_emprunt[] = array(
         'message' => 'Emprunt réussi',
+        'success' => true,
         'status' => 201
     );
-    echo json_encode($reponse_emprunt);
+    echo json_encode($reponse_emprunt[0]);
 }
 
 
@@ -198,6 +206,7 @@ function rendre_voiture() {
     if (!isset($data['id_emprunt'])) {
         echo json_encode([
             'message' => "Erreur dans l'envoi des données",
+            'success' => false,
             'status' => 400
         ]);
         return;
@@ -208,10 +217,11 @@ function rendre_voiture() {
 
     DAL_date_fin_emprunt($id_emprunt_formulaire, $date_fin);
     $reponse_emprunt[] = array(
-        'message' => 'Rendu voiture réussie',
+        'message' => 'La voiture à été rendue',
+        'success' => true,
         'status' => 201
     );
-    echo json_encode($reponse_emprunt);
+    echo json_encode($reponse_emprunt[0]);
 }
 
 ?>

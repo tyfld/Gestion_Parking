@@ -61,7 +61,7 @@ function inscription() {
             'message' => 'Email déjà utilisé',
             'status' => 409
         );
-        echo json_encode($reponse_inscription);
+        echo json_encode($reponse_inscription[0]);
         return;
     }
 
@@ -79,7 +79,7 @@ function inscription() {
         'success' => true,
         'status' => 201
     );
-    echo json_encode($reponse_inscription);
+    echo json_encode($reponse_inscription[0]);
 }
 
 
