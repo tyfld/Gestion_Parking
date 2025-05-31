@@ -1,12 +1,40 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect} from "react";
 
 function Home({ isAdmin }) {
+
+  const [sessionData, setSessionData] = useState({"session": false});
+
+  const fetchSession = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/session";
+    try {
+      const response = await fetch(URL, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      })
+      const sessionData = await response.json();
+      setSessionData(sessionData);
+      console.log(sessionData)
+    } catch (error) {
+      console.error("Erreur lors de la récupération de la session : ", error);
+    }
+  }
+
+  useEffect(() => {
+      fetchSession();
+    }, [])
+
     return (
       <div className="min-h-screen bg-gray-100 p-6">
         {/* En-tête */}
         <header className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-semibold">Page d'accueil</h1>
-          <button className="border rounded-full px-4 py-2">Profil</button>
+          {sessionData.session ? (
+          <a href="/profil" className="border rounded-full px-4 py-2">Profil</a>
+        ) : (
+          <a href="/connexion" className="border rounded-full px-4 py-2">Connexion</a>
+        )}
         </header>
   
         <div className="flex gap-4">

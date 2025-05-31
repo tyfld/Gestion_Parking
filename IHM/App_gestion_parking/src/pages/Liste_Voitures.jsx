@@ -1,14 +1,53 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect} from "react";
 
 function Liste_Voitures() {
+
+  const [sessionData, setSessionData] = useState({"session": false});
+  const [voituresData, setVoituresData] = useState([]);
+
+
+  const fetchSession = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/session";
+    try {
+      const response = await fetch(URL, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      })
+      const sessionData = await response.json();
+      setSessionData(sessionData);
+    } catch (error) {
+      console.error("Erreur lors de la récupération de la session : ", error);
+    }
+  }
+
   // Données simulées (à remplacer par une API plus tard)
-  const voitures = [
-    { id: 1, modele: "Toyota Yaris", dispo: true },
-    { id: 2, modele: "Peugeot 208", dispo: true },
-    { id: 3, modele: "Renault Clio", dispo: false },
-    { id: 4, modele: "Citroën C3", dispo: false },
-    { id: 5, modele: "Dacia Sandero", dispo: true },
-  ];
+  /*const voitures = [
+    { id: 1, modele: "Toyota Yaris", disponible: true },
+    { id: 2, modele: "Peugeot 208", disponible: true },
+    { id: 3, modele: "Renault Clio", disponible: false },
+    { id: 4, modele: "Citroën C3", disponible: false },
+    { id: 5, modele: "Dacia Sandero", disponible: true },
+  ];*/
+
+  
+
+  const fetchData = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/liste-voitures";
+    try {
+      const response = await fetch(URL)
+      const data = await response.json();
+      setVoituresData(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  }
+
+  useEffect(() => {
+      fetchSession();
+      fetchData();
+    }, [])
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -18,7 +57,12 @@ function Liste_Voitures() {
           <button className="border rounded-full px-4 py-2">Accueil</button>
         </Link>
         <h1 className="text-2xl font-bold">Loca Super 2000</h1>
-        <button className="border rounded-full px-4 py-2">Profil</button>
+        {/*affiche profil ou connexion en fonction de la session ouverte*/}
+        {sessionData.session ? (
+          <a href="/profil" className="border rounded-full px-4 py-2">Profil</a>
+        ) : (
+          <a href="/connexion" className="border rounded-full px-4 py-2">Connexion</a>
+        )}
       </header>
 
       {/* Tableau */}
@@ -33,12 +77,12 @@ function Liste_Voitures() {
             </tr>
           </thead>
           <tbody>
-            {voitures.map((v) => (
-              <tr key={v.id} className="text-center">
+            {voituresData.map((v) => (
+              <tr key={v.id_voiture} className="text-center">
                 <td className="border px-4 py-2">{v.modele}</td>
-                <td className="border px-4 py-2">{v.dispo ? "OUI" : "NON"}</td>
+                <td className="border px-4 py-2">{v.disponible ? "OUI" : "NON"}</td>
                 <td className="border px-4 py-2">
-                  {v.dispo ? (
+                  {v.disponible ? (
 
                     <Link to="/emprunter">
                         <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
@@ -46,16 +90,25 @@ function Liste_Voitures() {
                         </button>
                     </Link>
                   ) : (
-                    "---"
-                  )}
+                    sessionData.id_utilisateur == v.id_utilisateur) ? (
+                      <Link to={`/emprunter/${v.id_voiture}`}>
+                        <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                          Rendre la voiture
+                        </button>
+                      </Link>
+                    ) : ("---")
+                  }
+                  
                 </td>
-                <Link to="/historique_emprunt">
-                    <td className="border px-4 py-2">
+
+                <td className="border px-4 py-2">
+                  <a></a>
+                  <Link to={`/historique_emprunt/${v.id_voiture}`}>
                     <button className="border rounded px-3 py-1 hover:bg-gray-100">
                         Voir historique
                     </button>
-                    </td>
-                </Link>
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -3,7 +3,7 @@
 // Liste de tous les emprunts
 function DAL_lister_emprunts() {
     require __DIR__ . "/bdd.php";
-    $sql = "SELECT * from emprunst";
+    $sql = "SELECT * from emprunts";
     $requete = $conn->query($sql);
     $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
     $liste_emprunts = [];

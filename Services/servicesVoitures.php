@@ -1,8 +1,15 @@
 <?php
 
-header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Credentials: true');
-header('Content-Type: application/json');
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: http://localhost:5173');
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    http_response_code(200);
+    exit();
+}
+
+require_once __DIR__ . "/session.php";
 
 
 // Lister les voitures ainsi que leur disponibilité
@@ -16,7 +23,9 @@ function lister_voiture() {
 
     foreach ($voiture as $v) {
         $disponible = true;
+        $id_utilisateur;
         foreach ($emprunt as $e) {
+            $id_utilisateur = $e->get_id_utilisateur();
             if ($v->get_id_voiture() == $e->get_id_voiture()) {
                 $disponible = false;
                 break;
@@ -24,12 +33,48 @@ function lister_voiture() {
         }
         $json_voiture[] = array(
             'id_voiture' => $v->get_id_voiture(),
+            'id_utilisateur' => $id_utilisateur,
             'modele' => $v-> get_modele(),
-            'plaque-immatriculation' => $v->get_plaque_immatriculation(),
+            'plaque_immatriculation' => $v->get_plaque_immatriculation(),
             'disponible' => $disponible
             );
     }
     echo json_encode($json_voiture);
+}
+
+// idem mais pour une voiture précise
+function disponible_voiture() {
+    require_once __DIR__ . "/../DAL/voituresDAL.php";
+    require_once __DIR__ . "/../DAL/empruntsDAL.php";
+
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    $voiture = DAL_lister_voitures();
+    $emprunt = DAL_lister_emprunts_en_cours();
+    $json_voiture = array();
+
+    foreach ($voiture as $v) {
+
+        if ($v->get_id_voiture() == $data['id_voiture']) {
+            $disponible = true;
+            $id_utilisateur;
+            foreach ($emprunt as $e) {
+                $id_utilisateur = $e->get_id_utilisateur();
+                if ($v->get_id_voiture() == $e->get_id_voiture()) {
+                    $disponible = false;
+                    break;
+                }
+            }
+            $json_voiture[] = array(
+                'id_voiture' => $v->get_id_voiture(),
+                'id_utilisateur' => $id_utilisateur,
+                'modele' => $v-> get_modele(),
+                'plaque_immatriculation' => $v->get_plaque_immatriculation(),
+                'disponible' => $disponible
+                );
+        }
+    }
+    echo json_encode($json_voiture[0]);
 }
 
 
@@ -55,7 +100,7 @@ function detail_voiture() {
         'modele' => $voiture[0]->get_modele(),
         'plaque_immatriculation' => $voiture[0]->get_plaque_immatriculation(),
     );
-    echo json_encode($json_voiture);
+    echo json_encode($json_voiture[0]);
 }
 
 
@@ -65,7 +110,6 @@ function emprunt_historique_utilisateur() {
     require_once __DIR__ . "/../DAL/voituresDAL.php";
     require_once __DIR__ . "/../DAL/empruntsDAL.php";
 
-    session_start();
     $id_session = $_SESSION['id_utilisateur'];
 
     $emprunts = DAL_emprunt_historique("id_utilisateur", $id_session);
@@ -91,9 +135,9 @@ function emprunt_historique_voiture() {
     require_once __DIR__ . "/../DAL/utilisateursDAL.php";
     require_once __DIR__ . "/../DAL/empruntsDAL.php";
 
-    $id_voiture = 1;
+    $data = json_decode(file_get_contents('php://input'), true);
 
-    $emprunts = DAL_emprunt_historique("id_voiture", $id_voiture);
+    $emprunts = DAL_emprunt_historique("id_voiture", $data['id_voiture']);
     $json_emprunts = array();
 
     // liste des voitures pour les emprunt trouvés

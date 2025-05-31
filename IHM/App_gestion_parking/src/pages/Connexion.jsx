@@ -1,10 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Connexion() {
 
-    const navigate = useNavigate();
+  const [sessionData, setSessionData] = useState({"session": false});
+  const navigate = useNavigate();
+    
+  const fetchSession = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/session";
+    try {
+      const response = await fetch(URL, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      })
+      const sessionData = await response.json();
+      setSessionData(sessionData);
+    } catch (error) {
+      console.error("Erreur lors de la récupération de la session : ", error);
+    }
+    if (sessionData.session) {
+      navigate("/");
+    }
+  }
+    
+  useEffect(() => {
+    fetchSession();
+  }, [])
 
+  
   const [form, setForm] = useState({
     email: "",
     motDePasse: "",
@@ -19,18 +43,42 @@ function Connexion() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // TODO: vérification via une vraie API (backend)
-    if (form.email === "admin@example.com" && form.motDePasse === "admin123") {
-      // Exemple fictif
-      alert("Connexion réussie !");
-      navigate("/"); // Redirige vers la page d’accueil
-    } else {
-      setErreur("Identifiants incorrects.");
+    try {
+      const URL = "http://localhost/projets/Gestion_Parking/connexion";
+      fetch(URL, {
+        method: "POST",
+        credentials: "include",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          "email": form.email,
+          "mot_de_passe": form.motDePasse,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+            alert("Connexion réussie !");
+            navigate("/");
+          } else {
+            setErreur(data.message || "Erreur lors de la connexion.");
+          }
+      })
+    } catch (error) {
+      console.error("Erreur lors de la connexion :", error);
+      setErreur("Une erreur est survenue. Veuillez réessayer plus tard.");
+      return;
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
+      {/* En-tête */}
+      <header className="flex justify-between items-center mb-8">
+        <Link to="/">
+          <button className="border rounded-full px-4 py-2">Accueil</button>
+        </Link>
+      </header>
+
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Connexion</h2>
 
