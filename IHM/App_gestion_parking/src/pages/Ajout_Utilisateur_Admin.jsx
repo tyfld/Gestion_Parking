@@ -1,13 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 function Ajout_Utilisateur_Admin() {
 
-    const [form, setForm] = useState({
-        nom: "",
-        email: "",
-        motDePasse: "",
-        role: "utilisateur",
-    });
+  const [sessionData, setSessionData] = useState({"session": false});
+  const navigate = useNavigate();
+    
+  const fetchSession = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/session";
+    try {
+      const response = await fetch(URL, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      })
+      const sessionData = await response.json();
+      setSessionData(sessionData);
+    } catch (error) {
+        console.error("Erreur lors de la récupération de la session : ", error);
+    }
+  }
+    
+  useEffect(() => {
+    fetchSession();
+  }, [])
+
+  useEffect(() => {
+    if (sessionData.session && sessionData.role != 1) {
+      navigate("/")
+    }
+  }, [sessionData, navigate])
+
+
+  const [form, setForm] = useState({
+    nom: "",
+    email: "",
+    motDePasse: "",
+    role: "utilisateur",
+  });
     
     const [utilisateurs, setUtilisateurs] = useState([]);
     
@@ -19,17 +49,53 @@ function Ajout_Utilisateur_Admin() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setUtilisateurs([...utilisateurs, form]);
+
+        try {
+          let role_bdd;
+          if (form.role === "utilisateur") {
+            role_bdd = 0;
+          } else if (form.role === "admin") {
+            role_bdd = 1;
+          }
+          const URL = "http://localhost/projets/Gestion_Parking/inscription-admin";
+          fetch(URL, {
+            method: "POST",
+            credentials: "include",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              "nom": form.nom,
+              "email": form.email,
+              "role_utilisateur": role_bdd,
+              "mot_de_passe": form.motDePasse
+            }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert("Utilisateur ajoutée avec succès !");
+            } else {
+              alert(data.message || "Erreur lors de l'ajout d'un utilisateur.");
+            }
+          })
+        } catch (error) {
+          console.error("Erreur lors de la création du compte :", error);
+          alert("Une erreur est survenue. Veuillez réessayer plus tard.");
+          return;
+        }
+
         setForm({
           nom: "",
           email: "",
           motDePasse: "",
           role: "utilisateur",
         });
-        alert("Utilisateur ajouté !");
     };
     
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
+        <Link to="/">
+          <button className="border rounded-full px-4 py-2">Accueil</button>
+        </Link>
         <div className="bg-white p-8 rounded shadow-md w-full max-w-xl">
         <h2 className="text-2xl font-bold mb-6 text-center">Ajouter un utilisateur</h2>
     

@@ -11,24 +11,24 @@ class Voiture{
     }
 
     // Getter et Setter
-    public function getId_voiture(){
+    public function get_id_voiture(){
         return $this->id_voiture;
     }
-    public function setId_voiture($id_voiture){
+    public function set_id_voiture($id_voiture){
         $this->id_voiture = $id_voiture;
     }
 
-    public function getModele(){
+    public function get_modele(){
         return $this->modele;
     }
-    public function setModele($modele){
+    public function set_modele($modele){
         $this->modele = $modele;
     }
 
-    public function getPlaque_immatriculation(){
+    public function get_plaque_immatriculation(){
         return $this->plaque_immatriculation;
     }
-    public function setPlaque_immatriculation($plaque_immatriculation){
+    public function set_plaque_immatriculation($plaque_immatriculation){
         $this->plaque_immatriculation = $plaque_immatriculation;
     }
 

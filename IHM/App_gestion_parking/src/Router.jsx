@@ -31,19 +31,19 @@ const router = createBrowserRouter([
         element: <Profil />
     },
     {
-        path: "/emprunter",
+        path: "/emprunter/:id",
         element: <Emprunter />
     },
     {
-        path: "/historique_emprunt",
+        path: "/historique_emprunt/:id",
         element: <Historique_Emprunt />
     },
     {
-        path: "/ajout_utilisateur",
+        path: "/ajout_utilisateur", // prévoir route bloquée (voir projet Murmure)
         element: <Ajout_Utilisateur_Admin />
     },
     {
-        path: "/ajout_voiture",
+        path: "/ajout_voiture", // prévoir route bloquée (voir projet Murmure)
         element: <Ajout_Voiture_Admin />
     },
 ])

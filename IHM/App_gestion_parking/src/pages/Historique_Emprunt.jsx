@@ -1,15 +1,55 @@
 import { Link, useParams } from "react-router-dom";
+import { useState, useEffect} from "react";
 
 function Historique_Emprunt() {
 
   const { id } = useParams(); // ID de la voiture
 
+  const [sessionData, setSessionData] = useState({"session": false});
+  const [voitureData, setVoitureData] = useState([]);
+
+  const fetchSession = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/session";
+    try {
+      const response = await fetch(URL, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      })
+      const sessionData = await response.json();
+      setSessionData(sessionData);
+    } catch (error) {
+      console.error("Erreur lors de la récupération de la session : ", error);
+    }
+  }
+  
+  const fetchData = async () => {
+    const URL = "http://localhost/projets/Gestion_Parking/emprunts-historique-voiture";
+    try {
+      // envoyre le useParam en POST
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ "id_voiture": id })
+      })
+      const data = await response.json();
+      setVoitureData(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  }
+  
+  useEffect(() => {
+    fetchSession();
+    fetchData();
+  }, [])
+
   // Données simulées (à remplacer par une API plus tard)
-  const historique = [
+  /*const historique = [
     { utilisateur: "Alice", date: "2024-12-01" },
     { utilisateur: "Bob", date: "2025-01-15" },
     { utilisateur: "Charlie", date: "2025-03-22" },
-  ];
+  ];*/
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -19,13 +59,17 @@ function Historique_Emprunt() {
           <button className="border rounded-full px-4 py-2">Accueil</button>
         </Link>
         <h1 className="text-2xl font-bold">Historique d'emprunt</h1>
-        <button className="border rounded-full px-4 py-2">Profil</button>
+        {sessionData.session ? (
+          <a href="/profil" className="border rounded-full px-4 py-2">Profil</a>
+        ) : (
+          <a href="/connexion" className="border rounded-full px-4 py-2">Connexion</a>
+        )}
       </header>
 
       {/* Contenu principal */}
       <div className="flex flex-col items-center gap-6">
         <p className="text-xl mb-4">
-          <strong>Voiture ID:</strong> {id}
+          <strong>Voiture:</strong> {voitureData.modele}
         </p>
 
         <div className="bg-white shadow rounded w-full max-w-md">
@@ -33,14 +77,16 @@ function Historique_Emprunt() {
             <thead className="bg-gray-200">
               <tr>
                 <th className="border px-4 py-2">Utilisateur</th>
-                <th className="border px-4 py-2">Date</th>
+                <th className="border px-4 py-2">Date d'emprunt</th>
+                <th className="border px-4 py-2">Date de rendu</th>
               </tr>
             </thead>
             <tbody>
-              {historique.map((entry, index) => (
+              {voitureData.map((v, index) => (
                 <tr key={index} className="text-center">
-                  <td className="border px-4 py-2">{entry.utilisateur}</td>
-                  <td className="border px-4 py-2">{entry.date}</td>
+                  <td className="border px-4 py-2">{v.nom_utilisateur}</td>
+                  <td className="border px-4 py-2">{v.date_debut}</td>
+                  <td className="border px-4 py-2">{v.date_fin ? (v.date_fin) : ("Toujours empruntée")}</td>
                 </tr>
               ))}
             </tbody>

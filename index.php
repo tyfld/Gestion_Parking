@@ -1,6 +1,10 @@
 <?php
 
 header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -16,18 +20,45 @@ if ($requestUri === '') {
     $requestUri = '/';
 }
 
-require_once __DIR__ . '/Services/ServicesVoitures.php';
-require_once __DIR__ . '/Services/ServicesUtilisateurs.php';
+require_once __DIR__ . '/Services/servicesVoitures.php';
+require_once __DIR__ . '/Services/servicesUtilisateurs.php';
+require_once __DIR__ . '/Services/servicesAdmin.php';
 
 // Création des routes:
 $routes = [
     'GET' => [
         '/' => 'home',
-        '/liste-voitures' => 'listerVoiture',
-        '/profil' => 'profilUtilisateur',
+        
+        '/profil' => 'profil_utilisateur',
+        '/session' => 'verif_session',
+        '/connexion-test' => 'connexion_test', // à suppr, pour dev
+        '/deconnexion' => 'deconnexion',
+
+        '/liste-voitures' => 'lister_voiture',
+        '/emprunts-historique-utilisateur' => 'emprunt_historique_utilisateur',
+
     ],
     'POST' => [
-        '/exemple' => 'exemplePOST',
+        '/connexion' => 'connexion',
+        '/inscription' => 'inscription',
+
+        '/modifier-profil' => 'modifier_profil_utilisateur',
+        '/supprimer-profil'=> 'supprimer_profil_utilisateur',
+        
+        '/emprunter-voiture' => 'emprunter_voiture',
+        '/rendre-voiture' => 'rendre_voiture',
+        
+        '/details-voiture' => 'detail_voiture',
+        '/voiture-disponible' => 'disponible_voiture',
+        '/emprunts-historique-voiture' => 'emprunt_historique_voiture',
+
+        // routes pour admin
+        '/ajouter-voiture' => 'ajouter_voiture',
+        '/modifier-voiture' => 'modifier_voiture',
+        '/supprimer-voiture' => 'supprimer_voiture',
+
+        '/inscription-admin' => 'nouvel_utilisateur_admin',
+
     ]
 ];
 
