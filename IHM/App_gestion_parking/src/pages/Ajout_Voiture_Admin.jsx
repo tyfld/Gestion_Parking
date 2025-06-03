@@ -122,7 +122,7 @@ function Ajout_Voiture_Admin() {
                     <li key={i} className="bg-gray-50 border rounded px-4 py-2">
                       <p className="font-medium">{v.modele}</p>
                       <p className="text-sm text-gray-600">
-                        Plaque : {v.plaque_immatriculation}
+                        Plaque : {v.plaque}
                       </p>
                     </li>
                   ))}
